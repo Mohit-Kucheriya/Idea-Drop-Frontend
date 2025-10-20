@@ -1,0 +1,13 @@
+@import url("https://fonts.googleapis.com/css2?family=Parkinsans:wght@300..800&display=swap");
+
+@import "tailwindcss";
+
+body {
+  @apply m-0;
+  @theme {
+    --font-sans: "Parkinsans", sans-serif;
+  }
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
