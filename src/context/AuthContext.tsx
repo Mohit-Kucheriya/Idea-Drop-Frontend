@@ -21,15 +21,34 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [user, setUser] = useState<AuthContextType["user"] | null>(null);
 
-  useEffect(function () {
+  // useEffect(function () {
+  //   const loadAuth = async () => {
+  //     try {
+  //       const { accessToken: newToken, user } = await refreshAccessToken();
+  //       setAccessToken(newToken);
+  //       setUser(user);
+  //       setStoredAccessToken(newToken);
+  //     } catch (err: any) {
+  //       console.log(err);
+  //     }
+  //   };
+  //   loadAuth();
+  // }, []);
+  useEffect(() => {
     const loadAuth = async () => {
       try {
+        // 👇 Check if user might still be logged in
+        const hasRefreshCookie = document.cookie.includes("refreshToken=");
+        if (!hasRefreshCookie) return; // ⛔ Skip refresh if no cookie
+
         const { accessToken: newToken, user } = await refreshAccessToken();
         setAccessToken(newToken);
         setUser(user);
         setStoredAccessToken(newToken);
       } catch (err: any) {
-        console.log(err);
+        console.log("Auth load failed:", err.message);
+        setAccessToken(null);
+        setUser(null);
       }
     };
     loadAuth();

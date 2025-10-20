@@ -3,7 +3,7 @@ import { getStoredAccessToken, setStoredAccessToken } from "./authToken";
 import { refreshAccessToken } from "@/api/auth";
 
 const api = axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL}/api`,
+  baseURL: `${import.meta.env.VITE_PRODUCTION_API_URL}/api`,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
@@ -19,7 +19,6 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Refresh token after expire
 api.interceptors.response.use(
   (res) => res,
   async (err) => {
@@ -33,11 +32,13 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       try {
         const { accessToken: newToken } = await refreshAccessToken();
+        if (!newToken) throw new Error("No new token");
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
         setStoredAccessToken(newToken);
         return api(originalRequest);
-      } catch (err) {
-        console.error(err);
+      } catch (refreshError) {
+        console.log("Refresh failed, logging out...");
+        setStoredAccessToken(null);
       }
     }
 

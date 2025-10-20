@@ -37,7 +37,7 @@ function App() {
           Latest Ideas
         </h2>
         <div className="space-y-6">
-          {ideas.map((idea) => (
+          {ideas?.map((idea) => (
             <IdeaCard key={idea._id} idea={idea} label="Read more" />
           ))}
         </div>
