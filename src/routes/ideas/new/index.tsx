@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import React, { useState } from "react";
-import type { Idea } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { createIdea } from "@/api/ideas";
 import { useNavigate } from "@tanstack/react-router";
